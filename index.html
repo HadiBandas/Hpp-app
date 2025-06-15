@@ -351,8 +351,9 @@
             margin-bottom: 20px;
         }
 
+        /* PERBAIKAN: Gunakan !important untuk memastikan prioritas */
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         .error-message {
@@ -369,11 +370,17 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 2000; /* Pastikan di atas semua elemen */
+            transition: opacity 0.3s ease;
+        }
+        
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none; /* Biarkan interaksi dengan elemen bawah */
         }
         
         .loading-spinner {
@@ -575,6 +582,17 @@
             .comparison-table td {
                 padding: 8px 4px;
             }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab-btn {
+                flex: 1;
+                min-width: 100px;
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -589,9 +607,11 @@
             <p class="subtitle">Kalkulator HPP & Analisis Marketplace untuk Bisnis F&B</p>
         </header>
 
+        <!-- Loading Overlay -->
         <div id="loadingOverlay" class="loading-overlay hidden">
-    <div class="loading-spinner" aria-label="Memproses perhitungan"></div>
-    </div>
+            <div class="loading-spinner" aria-label="Memproses perhitungan"></div>
+            <div style="margin-top: 20px; font-weight: 500; color: var(--primary);">Memproses perhitungan...</div>
+        </div>
 
         <!-- Tab Navigation -->
         <div class="tabs">
@@ -986,10 +1006,18 @@
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
         
-        // Initialize with one ingredient
+        // Initialize the application
         document.addEventListener('DOMContentLoaded', () => {
+            // PERBAIKAN: Pastikan loading overlay disembunyikan saat halaman dimuat
+            loadingOverlay.classList.add('hidden');
+            
+            // Tambahkan bahan pertama
             addIngredientRow();
+            
+            // Setup event listeners
             setupEventListeners();
+            
+            // Load saved calculations
             loadSavedCalculations();
         });
 
@@ -1139,98 +1167,105 @@
             return isValid;
         }
 
+        // PERBAIKAN: Fungsi wrapper untuk operasi dengan loading
+        function withLoading(callback) {
+            try {
+                // Tampilkan loading
+                loadingOverlay.classList.remove('hidden');
+                
+                // Jalankan callback
+                callback();
+            } catch (error) {
+                console.error("Operation failed:", error);
+                alert(`Terjadi kesalahan: ${error.message}`);
+            } finally {
+                // Sembunyikan loading setelah operasi selesai
+                setTimeout(() => {
+                    loadingOverlay.classList.add('hidden');
+                }, 300);
+            }
+        }
+
         // Calculate basic HPP
         function calculateBasicHPP() {
             if (!validateForm()) return;
             
-            // Show loading
-            loadingOverlay.classList.remove('hidden');
-            
-            // Delay to simulate calculation
-            setTimeout(() => {
-                try {
-                    // Get product details
-                    currentProduct.name = document.getElementById('productName').value.trim();
-                    currentProduct.portions = parseInt(document.getElementById('portionCount').value);
-                    currentProduct.laborCost = parseFloat(document.getElementById('laborCost').value) || 0;
-                    currentProduct.utilityCost = parseFloat(document.getElementById('utilityCost').value) || 0;
-                    currentProduct.packagingCost = parseFloat(document.getElementById('packagingCost').value) || 0;
-                    currentProduct.wastePercent = parseFloat(document.getElementById('wastePercent').value) || 0;
-                    currentProduct.otherCost = parseFloat(document.getElementById('otherCost').value) || 0;
-                    currentProduct.sellingPrice = parseFloat(document.getElementById('sellingPrice').value);
+            withLoading(() => {
+                // Get product details
+                currentProduct.name = document.getElementById('productName').value.trim();
+                currentProduct.portions = parseInt(document.getElementById('portionCount').value);
+                currentProduct.laborCost = parseFloat(document.getElementById('laborCost').value) || 0;
+                currentProduct.utilityCost = parseFloat(document.getElementById('utilityCost').value) || 0;
+                currentProduct.packagingCost = parseFloat(document.getElementById('packagingCost').value) || 0;
+                currentProduct.wastePercent = parseFloat(document.getElementById('wastePercent').value) || 0;
+                currentProduct.otherCost = parseFloat(document.getElementById('otherCost').value) || 0;
+                currentProduct.sellingPrice = parseFloat(document.getElementById('sellingPrice').value);
+                
+                // Reset ingredients array
+                currentProduct.ingredients = [];
+                
+                // Get ingredients
+                const ingredientRows = ingredientsContainer.querySelectorAll('.ingredient-row');
+                ingredientRows.forEach(row => {
+                    const name = row.querySelector('input[type="text"]').value.trim();
+                    const qty = parseFloat(row.querySelector('input[type="number"]:nth-child(2)').value);
+                    const unit = row.querySelector('select').value;
+                    const price = parseFloat(row.querySelector('input[type="number"]:nth-child(4)').value);
                     
-                    // Reset ingredients array
-                    currentProduct.ingredients = [];
-                    
-                    // Get ingredients
-                    const ingredientRows = ingredientsContainer.querySelectorAll('.ingredient-row');
-                    ingredientRows.forEach(row => {
-                        const name = row.querySelector('input[type="text"]').value.trim();
-                        const qty = parseFloat(row.querySelector('input[type="number"]:nth-child(2)').value);
-                        const unit = row.querySelector('select').value;
-                        const price = parseFloat(row.querySelector('input[type="number"]:nth-child(4)').value);
-                        
-                        currentProduct.ingredients.push({
-                            name,
-                            qty,
-                            unit,
-                            price
-                        });
+                    currentProduct.ingredients.push({
+                        name,
+                        qty,
+                        unit,
+                        price
                     });
-                    
-                    // Calculate total ingredient cost
-                    let totalIngredientCost = 0;
-                    currentProduct.ingredients.forEach(ing => {
-                        totalIngredientCost += ing.price;
-                    });
-                    
-                    // Adjust for waste
-                    const wasteFactor = 1 + (currentProduct.wastePercent / 100);
-                    const adjustedIngredientCost = totalIngredientCost * wasteFactor;
-                    
-                    // Total production costs
-                    const totalProductionCost = (
-                        currentProduct.laborCost + 
-                        currentProduct.utilityCost + 
-                        currentProduct.packagingCost + 
-                        currentProduct.otherCost
-                    );
-                    
-                    // Total cost for all portions
-                    const totalCost = adjustedIngredientCost + totalProductionCost;
-                    
-                    // HPP per portion
-                    const hppPerPortion = totalCost / currentProduct.portions;
-                    currentProduct.basicHPP = hppPerPortion;
-                    
-                    // Calculate profit and margin
-                    const profitPerPortion = currentProduct.sellingPrice - hppPerPortion;
-                    const profitMargin = (profitPerPortion / currentProduct.sellingPrice) * 100;
-                    
-                    // Display results
-                    displayBasicResults(hppPerPortion, profitPerPortion, profitMargin);
-                    
-                    // Create cost breakdown chart
-                    createBasicCostChart(
-                        adjustedIngredientCost,
-                        currentProduct.laborCost,
-                        currentProduct.utilityCost,
-                        currentProduct.packagingCost,
-                        currentProduct.otherCost
-                    );
-                    
-                    // Switch to marketplace tab
-                    setTimeout(() => {
-                        document.querySelector('[data-tab="marketplace"]').click();
-                        loadingOverlay.classList.add('hidden');
-                    }, 500);
-                    
-                } catch (error) {
-                    console.error("Calculation error:", error);
-                    alert("Terjadi kesalahan: " + error.message);
-                    loadingOverlay.classList.add('hidden');
-                }
-            }, 800);
+                });
+                
+                // Calculate total ingredient cost
+                let totalIngredientCost = 0;
+                currentProduct.ingredients.forEach(ing => {
+                    totalIngredientCost += ing.price;
+                });
+                
+                // Adjust for waste
+                const wasteFactor = 1 + (currentProduct.wastePercent / 100);
+                const adjustedIngredientCost = totalIngredientCost * wasteFactor;
+                
+                // Total production costs
+                const totalProductionCost = (
+                    currentProduct.laborCost + 
+                    currentProduct.utilityCost + 
+                    currentProduct.packagingCost + 
+                    currentProduct.otherCost
+                );
+                
+                // Total cost for all portions
+                const totalCost = adjustedIngredientCost + totalProductionCost;
+                
+                // HPP per portion
+                const hppPerPortion = totalCost / currentProduct.portions;
+                currentProduct.basicHPP = hppPerPortion;
+                
+                // Calculate profit and margin
+                const profitPerPortion = currentProduct.sellingPrice - hppPerPortion;
+                const profitMargin = (profitPerPortion / currentProduct.sellingPrice) * 100;
+                
+                // Display results
+                displayBasicResults(hppPerPortion, profitPerPortion, profitMargin);
+                
+                // Create cost breakdown chart
+                createBasicCostChart(
+                    adjustedIngredientCost,
+                    currentProduct.laborCost,
+                    currentProduct.utilityCost,
+                    currentProduct.packagingCost,
+                    currentProduct.otherCost
+                );
+                
+                // Switch to marketplace tab
+                setTimeout(() => {
+                    document.querySelector('[data-tab="marketplace"]').click();
+                }, 500);
+            });
         }
 
         // Display basic results
@@ -1324,58 +1359,48 @@
                 return;
             }
             
-            loadingOverlay.classList.remove('hidden');
-            
-            setTimeout(() => {
-                try {
-                    // Get marketing costs
-                    const marketingCosts = {
-                        adsBudget: parseFloat(document.getElementById('adsBudget').value) || 0,
-                        discountPercent: parseFloat(document.getElementById('discountPercent').value) || 0,
-                        cashbackPercent: parseFloat(document.getElementById('cashbackPercent').value) || 0,
-                        deliverySubsidy: parseFloat(document.getElementById('deliverySubsidy').value) || 0
-                    };
+            withLoading(() => {
+                // Get marketing costs
+                const marketingCosts = {
+                    adsBudget: parseFloat(document.getElementById('adsBudget').value) || 0,
+                    discountPercent: parseFloat(document.getElementById('discountPercent').value) || 0,
+                    cashbackPercent: parseFloat(document.getElementById('cashbackPercent').value) || 0,
+                    deliverySubsidy: parseFloat(document.getElementById('deliverySubsidy').value) || 0
+                };
+                
+                // Get operational costs
+                const operationalCosts = {
+                    photoCost: parseFloat(document.getElementById('photoCost').value) || 0,
+                    adminCost: parseFloat(document.getElementById('adminCost').value) || 0,
+                    returnReserve: parseFloat(document.getElementById('returnReserve').value) || 0,
+                    qcExtra: parseFloat(document.getElementById('qcExtra').value) || 0
+                };
+                
+                // Reset results
+                marketplaceResults = {};
+                
+                // Calculate for each selected marketplace
+                selectedMarketplaces.forEach(marketplace => {
+                    const result = calculateMultiChannelHPP(
+                        currentProduct.basicHPP,
+                        currentProduct.sellingPrice,
+                        marketplace,
+                        marketingCosts,
+                        operationalCosts
+                    );
                     
-                    // Get operational costs
-                    const operationalCosts = {
-                        photoCost: parseFloat(document.getElementById('photoCost').value) || 0,
-                        adminCost: parseFloat(document.getElementById('adminCost').value) || 0,
-                        returnReserve: parseFloat(document.getElementById('returnReserve').value) || 0,
-                        qcExtra: parseFloat(document.getElementById('qcExtra').value) || 0
-                    };
-                    
-                    // Reset results
-                    marketplaceResults = {};
-                    
-                    // Calculate for each selected marketplace
-                    selectedMarketplaces.forEach(marketplace => {
-                        const result = calculateMultiChannelHPP(
-                            currentProduct.basicHPP,
-                            currentProduct.sellingPrice,
-                            marketplace,
-                            marketingCosts,
-                            operationalCosts
-                        );
-                        
-                        marketplaceResults[marketplace] = result;
-                    });
-                    
-                    // Display results
-                    displayMarketplaceResults();
-                    
-                    // Switch to results tab
-                    setTimeout(() => {
-                        document.querySelector('[data-tab="results"]').click();
-                        marketplaceResultsSection.classList.remove('hidden');
-                        loadingOverlay.classList.add('hidden');
-                    }, 500);
-                    
-                } catch (error) {
-                    console.error("Analysis error:", error);
-                    alert("Terjadi kesalahan: " + error.message);
-                    loadingOverlay.classList.add('hidden');
-                }
-            }, 800);
+                    marketplaceResults[marketplace] = result;
+                });
+                
+                // Display results
+                displayMarketplaceResults();
+                
+                // Switch to results tab
+                setTimeout(() => {
+                    document.querySelector('[data-tab="results"]').click();
+                    marketplaceResultsSection.classList.remove('hidden');
+                }, 500);
+            });
         }
 
         // Calculate multi-channel HPP
@@ -1456,7 +1481,7 @@
             comparisonTableBody.innerHTML = '';
             
             // Find the best channel
-            let bestProfit = -Infinity;
+            let bestProfitValue = -Infinity;
             let bestChannelName = '';
             
             // Add rows for each marketplace
@@ -1497,24 +1522,26 @@
                 comparisonTableBody.appendChild(row);
                 
                 // Track best channel
-                if (result.finalProfit > bestProfit) {
-                    bestProfit = result.finalProfit;
+                if (result.finalProfit > bestProfitValue) {
+                    bestProfitValue = result.finalProfit;
                     bestChannelName = marketplaceConfig[marketplace].name;
                 }
             });
             
             // Display best channel
             bestChannel.textContent = bestChannelName;
-            bestProfit.textContent = `Profit: ${formatter.format(bestProfit)}`;
+            bestProfit.textContent = `Profit: ${formatter.format(bestProfitValue)}`;
             
             // Generate recommendations
             generateRecommendations();
             
             // Create marketplace cost chart (for the first marketplace)
-            const firstMarketplace = selectedMarketplaces[0];
-            createMarketplaceCostChart(
-                marketplaceResults[firstMarketplace]
-            );
+            if (selectedMarketplaces.length > 0) {
+                const firstMarketplace = selectedMarketplaces[0];
+                createMarketplaceCostChart(
+                    marketplaceResults[firstMarketplace]
+                );
+            }
         }
 
         // Create marketplace cost chart
