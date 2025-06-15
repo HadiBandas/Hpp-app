@@ -607,6 +607,112 @@
             color: #666;
         }
 
+        /* Home Page Styles */
+        .home-page {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(230, 57, 70, 0.1), rgba(42, 157, 143, 0.1));
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+        }
+
+        .hero-section h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            color: var(--text);
+            margin-bottom: 15px;
+        }
+
+        .hero-section p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 25px;
+            color: #444;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .testimonials {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+
+        .testimonial {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .testimonial p {
+            font-style: italic;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: var(--radius);
+            color: white;
+        }
+
+        .cta-section h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Responsive Adjustments */
         @media (min-width: 768px) {
             .container {
@@ -676,288 +782,359 @@
             <div style="margin-top: 20px; font-weight: 500; color: var(--primary);">Memproses perhitungan...</div>
         </div>
 
-        <!-- Tab Navigation -->
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="basic">Perhitungan Dasar</button>
-            <button class="tab-btn" data-tab="marketplace">Marketplace</button>
-            <button class="tab-btn" data-tab="results">Hasil & Analisis</button>
+        <!-- Home Page -->
+        <div id="homePage" class="home-page">
+            <div class="hero-section">
+                <h1>Kelola Keuangan Bisnis F&B Anda dengan Lebih Baik</h1>
+                <p>CafePro HPP membantu Anda menghitung Harga Pokok Produksi, menganalisis profitabilitas di berbagai marketplace, dan mengambil keputusan bisnis yang lebih cerdas.</p>
+                <button id="startBtn" class="btn btn-primary" style="max-width: 300px; margin: 0 auto;">
+                    <i class="fas fa-play" aria-hidden="true"></i> Mulai Sekarang
+                </button>
+            </div>
+
+            <div class="features">
+                <div class="feature-card">
+                    <i class="fas fa-calculator"></i>
+                    <h3>Hitung HPP Akurat</h3>
+                    <p>Kalkulasi harga pokok produksi dengan mempertimbangkan semua biaya bahan baku, tenaga kerja, dan overhead.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-store"></i>
+                    <h3>Analisis Marketplace</h3>
+                    <p>Bandingkan profitabilitas menu Anda di berbagai marketplace seperti GoFood, GrabFood, ShopeeFood, dan lainnya.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Laporan Keuangan</h3>
+                    <p>Dapatkan insight bisnis dari laporan analisis dan rekomendasi untuk meningkatkan profitabilitas.</p>
+                </div>
+            </div>
+
+            <div class="testimonials">
+                <div class="testimonial">
+                    <p>"Sejak menggunakan CafePro HPP, saya bisa mengoptimalkan harga menu di marketplace dan meningkatkan profit sebesar 25% dalam 3 bulan!"</p>
+                    <div class="testimonial-author">- Bapak Budi, Pemilik Warung Makan Sederhana</div>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="feature-card">
+                    <i class="fas fa-save"></i>
+                    <h3>Simpan Menu</h3>
+                    <p>Simpan perhitungan menu Anda untuk digunakan kembali dan pantau perubahan biaya dari waktu ke waktu.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-file-export"></i>
+                    <h3>Ekspor Data</h3>
+                    <p>Ekspor data perhitungan ke format CSV untuk analisis lebih lanjut atau penyimpanan arsip.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Akses di Semua Perangkat</h3>
+                    <p>Aplikasi responsif yang bekerja sempurna di desktop, tablet, maupun smartphone.</p>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <h2>Siap Tingkatkan Profit Bisnis F&B Anda?</h2>
+                <p>Mulai gunakan CafePro HPP sekarang secara gratis</p>
+                <button id="startBtn2" class="btn btn-outline" style="background: rgba(255,255,255,0.2); color: white; max-width: 300px; margin: 20px auto 0;">
+                    <i class="fas fa-play" aria-hidden="true"></i> Mulai Menghitung
+                </button>
+            </div>
         </div>
 
-        <!-- Main Form Section -->
-        <main>
-            <!-- Basic Calculation Tab -->
-            <div id="basicTab" class="tab-content active">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title"><i class="fas fa-calculator" aria-hidden="true"></i> Hitung HPP Produk</h2>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="productName">Nama Produk/Menu</label>
-                        <input type="text" id="productName" class="form-control" placeholder="Contoh: Cappuccino, Nasi Goreng Special" aria-required="true">
-                        <span id="nameError" class="error-message hidden">Harap masukkan nama produk</span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="portionCount">Jumlah Porsi</label>
-                        <input type="number" id="portionCount" class="form-control" value="1" min="1" aria-required="true">
-                        <span id="portionError" class="error-message hidden">Jumlah porsi harus minimal 1</span>
-                    </div>
-                    
-                    <div class="form-group">
+        <!-- Kalkulator Page -->
+        <div id="calcPage" class="hidden">
+            <!-- Tab Navigation -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="basic">Perhitungan Dasar</button>
+                <button class="tab-btn" data-tab="marketplace">Marketplace</button>
+                <button class="tab-btn" data-tab="results">Hasil & Analisis</button>
+            </div>
+
+            <!-- Main Form Section -->
+            <main>
+                <!-- Basic Calculation Tab -->
+                <div id="basicTab" class="tab-content active">
+                    <div class="card">
                         <div class="card-header">
-                            <h2 class="card-title"><i class="fas fa-carrot" aria-hidden="true"></i> Bahan Baku</h2>
-                        </div>
-                        <div id="ingredientsContainer">
-                            <!-- Ingredients will be added dynamically here -->
-                        </div>
-                        <button id="addIngredient" class="btn btn-outline mt-20" aria-label="Tambah bahan baru">
-                            <i class="fas fa-plus" aria-hidden="true"></i> Tambah Bahan
-                        </button>
-                    </div>
-                    
-                    <div class="form-group">
-                        <div class="card-header">
-                            <h2 class="card-title"><i class="fas fa-tools" aria-hidden="true"></i> Biaya Produksi</h2>
+                            <h2 class="card-title"><i class="fas fa-calculator" aria-hidden="true"></i> Hitung HPP Produk</h2>
                         </div>
                         
-                        <div class="input-group">
-                            <div class="form-group" style="flex: 1;">
-                                <label class="form-label" for="laborCost">Tenaga Kerja (per porsi)</label>
-                                <input type="number" id="laborCost" class="form-control" value="2000" min="0" aria-label="Biaya tenaga kerja per porsi">
+                        <div class="form-group">
+                            <label class="form-label" for="productName">Nama Produk/Menu</label>
+                            <input type="text" id="productName" class="form-control" placeholder="Contoh: Cappuccino, Nasi Goreng Special" aria-required="true">
+                            <span id="nameError" class="error-message hidden">Harap masukkan nama produk</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="portionCount">Jumlah Porsi</label>
+                            <input type="number" id="portionCount" class="form-control" value="1" min="1" aria-required="true">
+                            <span id="portionError" class="error-message hidden">Jumlah porsi harus minimal 1</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="fas fa-carrot" aria-hidden="true"></i> Bahan Baku</h2>
                             </div>
-                            <div class="form-group" style="flex: 1;">
-                                <label class="form-label" for="utilityCost">Listrik/Gas (per porsi)</label>
-                                <input type="number" id="utilityCost" class="form-control" value="500" min="0" aria-label="Biaya listrik/gas per porsi">
+                            <div id="ingredientsContainer">
+                                <!-- Ingredients will be added dynamically here -->
+                            </div>
+                            <button id="addIngredient" class="btn btn-outline mt-20" aria-label="Tambah bahan baru">
+                                <i class="fas fa-plus" aria-hidden="true"></i> Tambah Bahan
+                            </button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="fas fa-tools" aria-hidden="true"></i> Biaya Produksi</h2>
+                            </div>
+                            
+                            <div class="input-group">
+                                <div class="form-group" style="flex: 1;">
+                                    <label class="form-label" for="laborCost">Tenaga Kerja (per porsi)</label>
+                                    <input type="number" id="laborCost" class="form-control" value="2000" min="0" aria-label="Biaya tenaga kerja per porsi">
+                                </div>
+                                <div class="form-group" style="flex: 1;">
+                                    <label class="form-label" for="utilityCost">Listrik/Gas (per porsi)</label>
+                                    <input type="number" id="utilityCost" class="form-control" value="500" min="0" aria-label="Biaya listrik/gas per porsi">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="packagingCost">Packaging (per porsi)</label>
+                                <input type="number" id="packagingCost" class="form-control" value="1000" min="0" aria-label="Biaya packaging per porsi">
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label" for="packagingCost">Packaging (per porsi)</label>
-                            <input type="number" id="packagingCost" class="form-control" value="1000" min="0" aria-label="Biaya packaging per porsi">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <div class="card-header">
-                            <h2 class="card-title"><i class="fas fa-percentage" aria-hidden="true"></i> Biaya Lain</h2>
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="fas fa-percentage" aria-hidden="true"></i> Biaya Lain</h2>
+                            </div>
+                            
+                            <div class="input-group">
+                                <div class="form-group" style="flex: 1;">
+                                    <label class="form-label" for="wastePercent">Waste (% dari bahan baku)</label>
+                                    <input type="number" id="wastePercent" class="form-control" value="5" min="0" max="100" aria-label="Persentase waste bahan baku">
+                                    <span id="wasteError" class="error-message hidden">Waste harus antara 0-100%</span>
+                                </div>
+                                <div class="form-group" style="flex: 1;">
+                                    <label class="form-label" for="otherCost">Biaya Lainnya (per porsi)</label>
+                                    <input type="number" id="otherCost" class="form-control" value="0" min="0" aria-label="Biaya lainnya per porsi">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="sellingPrice">Harga Jual (per porsi)</label>
+                                <input type="number" id="sellingPrice" class="form-control" value="25000" min="0" aria-label="Harga jual per porsi">
+                                <span id="priceError" class="error-message hidden">Harga jual harus lebih besar dari 0</span>
+                            </div>
                         </div>
                         
-                        <div class="input-group">
-                            <div class="form-group" style="flex: 1;">
-                                <label class="form-label" for="wastePercent">Waste (% dari bahan baku)</label>
-                                <input type="number" id="wastePercent" class="form-control" value="5" min="0" max="100" aria-label="Persentase waste bahan baku">
-                                <span id="wasteError" class="error-message hidden">Waste harus antara 0-100%</span>
-                            </div>
-                            <div class="form-group" style="flex: 1;">
-                                <label class="form-label" for="otherCost">Biaya Lainnya (per porsi)</label>
-                                <input type="number" id="otherCost" class="form-control" value="0" min="0" aria-label="Biaya lainnya per porsi">
-                            </div>
+                        <button id="calculateBtn" class="btn btn-primary" aria-label="Hitung HPP produk">
+                            <i class="fas fa-calculator" aria-hidden="true"></i> Hitung & Lanjut ke Marketplace
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Marketplace Tab -->
+                <div id="marketplaceTab" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-store" aria-hidden="true"></i> Pilih Marketplace</h2>
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label" for="sellingPrice">Harga Jual (per porsi)</label>
-                            <input type="number" id="sellingPrice" class="form-control" value="25000" min="0" aria-label="Harga jual per porsi">
-                            <span id="priceError" class="error-message hidden">Harga jual harus lebih besar dari 0</span>
+                            <p style="font-weight: 500; color: var(--text); margin-bottom: 15px;">
+                                <i class="fas fa-info-circle"></i> Pilih marketplace yang ingin dianalisis. 
+                                Kalkulasi akan dilakukan secara terpisah untuk setiap channel.
+                            </p>
+                            <div class="marketplace-selector">
+                                <div class="marketplace-card" data-marketplace="shopee">
+                                    <i class="fab fa-shopify"></i>
+                                    <div>Shopee</div>
+                                </div>
+                                <div class="marketplace-card" data-marketplace="tokopedia">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <div>Tokopedia</div>
+                                </div>
+                                <div class="marketplace-card" data-marketplace="gofood">
+                                    <i class="fas fa-motorcycle"></i>
+                                    <div>GoFood</div>
+                                </div>
+                                <div class="marketplace-card" data-marketplace="grabfood">
+                                    <i class="fas fa-car"></i>
+                                    <div>GrabFood</div>
+                                </div>
+                                <div class="marketplace-card" data-marketplace="offline">
+                                    <i class="fas fa-store-alt"></i>
+                                    <div>Offline/Dine-in</div>
+                                </div>
+                            </div>
                         </div>
+                        
+                        <h3 class="section-title">
+                            <i class="fas fa-bullhorn"></i> Biaya Pemasaran & Promosi
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="adsBudget">Anggaran Iklan per Order (Rp)</label>
+                            <input type="number" id="adsBudget" class="form-control" value="0" min="0" aria-label="Anggaran iklan per order">
+                            <small class="text-muted">Shopee Ads, Boost, Featured Product</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="discountPercent">Diskon/Voucher Allocation (%)</label>
+                            <input type="number" id="discountPercent" class="form-control" value="0" min="0" max="100" aria-label="Persentase diskon">
+                            <small class="text-muted">Flash sale, voucher toko, promo khusus</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="cashbackPercent">Cashback Budget (%)</label>
+                            <input type="number" id="cashbackPercent" class="form-control" value="0" min="0" max="10" aria-label="Persentase cashback">
+                            <small class="text-muted">Program loyalitas, cashback member</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="deliverySubsidy">Free Delivery Subsidy (Rp)</label>
+                            <input type="number" id="deliverySubsidy" class="form-control" value="0" min="0" aria-label="Subsidi pengiriman gratis">
+                            <small class="text-muted">Jika gratis ongkir ditanggung seller</small>
+                        </div>
+                        
+                        <h3 class="section-title">
+                            <i class="fas fa-cogs"></i> Biaya Operasional Online
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="photoCost">Photography Cost per Product (Rp)</label>
+                            <input type="number" id="photoCost" class="form-control" value="0" min="0" aria-label="Biaya foto produk">
+                            <small class="text-muted">Alokasi biaya foto produk profesional</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="adminCost">Admin Marketplace per Order (Rp)</label>
+                            <input type="number" id="adminCost" class="form-control" value="0" min="0" aria-label="Biaya admin per order">
+                            <small class="text-muted">Gaji staff handle online order</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="returnReserve">Return/Refund Reserve (%)</label>
+                            <input type="number" id="returnReserve" class="form-control" value="0" min="0" max="10" aria-label="Persentase cadangan retur">
+                            <small class="text-muted">Antisipasi komplain, retur, refund</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="qcExtra">Quality Control Extra (Rp)</label>
+                            <input type="number" id="qcExtra" class="form-control" value="0" min="0" aria-label="Biaya quality control tambahan">
+                            <small class="text-muted">Standar kualitas marketplace</small>
+                        </div>
+                        
+                        <button id="analyzeBtn" class="btn btn-primary" aria-label="Analisis profitabilitas">
+                            <i class="fas fa-chart-line" aria-hidden="true"></i> Analisis Profitabilitas Marketplace
+                        </button>
                     </div>
-                    
-                    <button id="calculateBtn" class="btn btn-primary" aria-label="Hitung HPP produk">
-                        <i class="fas fa-calculator" aria-hidden="true"></i> Hitung & Lanjut ke Marketplace
-                    </button>
                 </div>
-            </div>
 
-            <!-- Marketplace Tab -->
-            <div id="marketplaceTab" class="tab-content">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title"><i class="fas fa-store" aria-hidden="true"></i> Pilih Marketplace</h2>
-                    </div>
-                    
-                    <div class="marketplace-selector">
-                        <div class="marketplace-card" data-marketplace="shopee">
-                            <i class="fab fa-shopify"></i>
-                            <div>Shopee</div>
-                        </div>
-                        <div class="marketplace-card" data-marketplace="tokopedia">
-                            <i class="fas fa-shopping-cart"></i>
-                            <div>Tokopedia</div>
-                        </div>
-                        <div class="marketplace-card" data-marketplace="gofood">
-                            <i class="fas fa-motorcycle"></i>
-                            <div>GoFood</div>
-                        </div>
-                        <div class="marketplace-card" data-marketplace="grabfood">
-                            <i class="fas fa-car"></i>
-                            <div>GrabFood</div>
-                        </div>
-                        <div class="marketplace-card" data-marketplace="offline">
-                            <i class="fas fa-store-alt"></i>
-                            <div>Offline/Dine-in</div>
-                        </div>
-                    </div>
-                    
-                    <h3 class="section-title">
-                        <i class="fas fa-bullhorn"></i> Biaya Pemasaran & Promosi
-                    </h3>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="adsBudget">Anggaran Iklan per Order (Rp)</label>
-                        <input type="number" id="adsBudget" class="form-control" value="0" min="0" aria-label="Anggaran iklan per order">
-                        <small class="text-muted">Shopee Ads, Boost, Featured Product</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="discountPercent">Diskon/Voucher Allocation (%)</label>
-                        <input type="number" id="discountPercent" class="form-control" value="0" min="0" max="100" aria-label="Persentase diskon">
-                        <small class="text-muted">Flash sale, voucher toko, promo khusus</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="cashbackPercent">Cashback Budget (%)</label>
-                        <input type="number" id="cashbackPercent" class="form-control" value="0" min="0" max="10" aria-label="Persentase cashback">
-                        <small class="text-muted">Program loyalitas, cashback member</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="deliverySubsidy">Free Delivery Subsidy (Rp)</label>
-                        <input type="number" id="deliverySubsidy" class="form-control" value="0" min="0" aria-label="Subsidi pengiriman gratis">
-                        <small class="text-muted">Jika gratis ongkir ditanggung seller</small>
-                    </div>
-                    
-                    <h3 class="section-title">
-                        <i class="fas fa-cogs"></i> Biaya Operasional Online
-                    </h3>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="photoCost">Photography Cost per Product (Rp)</label>
-                        <input type="number" id="photoCost" class="form-control" value="0" min="0" aria-label="Biaya foto produk">
-                        <small class="text-muted">Alokasi biaya foto produk profesional</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="adminCost">Admin Marketplace per Order (Rp)</label>
-                        <input type="number" id="adminCost" class="form-control" value="0" min="0" aria-label="Biaya admin per order">
-                        <small class="text-muted">Gaji staff handle online order</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="returnReserve">Return/Refund Reserve (%)</label>
-                        <input type="number" id="returnReserve" class="form-control" value="0" min="0" max="10" aria-label="Persentase cadangan retur">
-                        <small class="text-muted">Antisipasi komplain, retur, refund</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="qcExtra">Quality Control Extra (Rp)</label>
-                        <input type="number" id="qcExtra" class="form-control" value="0" min="0" aria-label="Biaya quality control tambahan">
-                        <small class="text-muted">Standar kualitas marketplace</small>
-                    </div>
-                    
-                    <button id="analyzeBtn" class="btn btn-primary" aria-label="Analisis profitabilitas">
-                        <i class="fas fa-chart-line" aria-hidden="true"></i> Analisis Profitabilitas Marketplace
-                    </button>
-                </div>
-            </div>
-
-            <!-- Results Tab -->
-            <div id="resultsTab" class="tab-content">
-                <!-- Basic Results -->
-                <div id="basicResults" class="hidden">
-                    <div class="result-card">
-                        <h2 class="result-title"><i class="fas fa-receipt" aria-hidden="true"></i> HASIL PERHITUNGAN DASAR</h2>
-                        <div class="result-value" id="hppResult">Rp 0</div>
-                        <div class="result-subvalue" id="profitResult">Profit: Rp 0 (0%)</div>
-                        
-                        <div class="progress-container">
-                            <div class="progress-bar" id="profitBar" style="width: 0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                <!-- Results Tab -->
+                <div id="resultsTab" class="tab-content">
+                    <!-- Basic Results -->
+                    <div id="basicResults" class="hidden">
+                        <div class="result-card">
+                            <h2 class="result-title"><i class="fas fa-receipt" aria-hidden="true"></i> HASIL PERHITUNGAN DASAR</h2>
+                            <div class="result-value" id="hppResult">Rp 0</div>
+                            <div class="result-subvalue" id="profitResult">Profit: Rp 0 (0%)</div>
+                            
+                            <div class="progress-container">
+                                <div class="progress-bar" id="profitBar" style="width: 0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                            </div>
+                            
+                            <p>Margin Profit: <span id="marginPercent">0</span>%</p>
                         </div>
                         
-                        <p>Margin Profit: <span id="marginPercent">0</span>%</p>
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="fas fa-chart-pie" aria-hidden="true"></i> Distribusi Biaya Dasar</h2>
+                            </div>
+                            
+                            <div class="chart-container">
+                                <canvas id="basicCostChart" aria-label="Grafik distribusi biaya dasar"></canvas>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title"><i class="fas fa-chart-pie" aria-hidden="true"></i> Distribusi Biaya Dasar</h2>
+                    <!-- Marketplace Results -->
+                    <div id="marketplaceResults" class="hidden">
+                        <div class="result-card">
+                            <h2 class="result-title"><i class="fas fa-store" aria-hidden="true"></i> ANALISIS MARKETPLACE</h2>
+                            <div class="result-value" id="bestChannel">-</div>
+                            <div class="result-subvalue" id="bestProfit">Profit: Rp 0 (0%)</div>
                         </div>
                         
-                        <div class="chart-container">
-                            <canvas id="basicCostChart" aria-label="Grafik distribusi biaya dasar"></canvas>
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="fas fa-exchange-alt" aria-hidden="true"></i> Perbandingan Profitabilitas Channel</h2>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="comparison-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Channel</th>
+                                            <th>HPP Total</th>
+                                            <th>Pendapatan Bersih</th>
+                                            <th>Profit</th>
+                                            <th>Margin</th>
+                                            <th>Rekomendasi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="comparisonTableBody">
+                                        <!-- Will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="fas fa-chart-pie" aria-hidden="true"></i> Distribusi Biaya Marketplace</h2>
+                            </div>
+                            
+                            <div class="chart-container">
+                                <canvas id="marketplaceCostChart" aria-label="Grafik distribusi biaya marketplace"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="fas fa-lightbulb" aria-hidden="true"></i> Rekomendasi Bisnis</h2>
+                            </div>
+                            
+                            <div id="recommendationsContainer">
+                                <!-- Recommendations will be added here -->
+                            </div>
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button id="saveBtn" class="btn btn-secondary" aria-label="Simpan hasil perhitungan">
+                                <i class="fas fa-save" aria-hidden="true"></i> Simpan
+                            </button>
+                            <button id="exportBtn" class="btn btn-success" aria-label="Ekspor data ke CSV">
+                                <i class="fas fa-file-csv" aria-hidden="true"></i> Ekspor CSV
+                            </button>
+                            <button id="printBtn" class="btn btn-outline" aria-label="Cetak hasil perhitungan">
+                                <i class="fas fa-print" aria-hidden="true"></i> Cetak
+                            </button>
+                            <button id="newCalcBtn" class="btn btn-outline" aria-label="Mulai perhitungan baru">
+                                <i class="fas fa-redo" aria-hidden="true"></i> Baru
+                            </button>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Marketplace Results -->
-                <div id="marketplaceResults" class="hidden">
-                    <div class="result-card">
-                        <h2 class="result-title"><i class="fas fa-store" aria-hidden="true"></i> ANALISIS MARKETPLACE</h2>
-                        <div class="result-value" id="bestChannel">-</div>
-                        <div class="result-subvalue" id="bestProfit">Profit: Rp 0 (0%)</div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title"><i class="fas fa-exchange-alt" aria-hidden="true"></i> Perbandingan Profitabilitas Channel</h2>
-                        </div>
-                        
-                        <div class="table-responsive">
-                            <table class="comparison-table">
-                                <thead>
-                                    <tr>
-                                        <th>Channel</th>
-                                        <th>HPP Total</th>
-                                        <th>Pendapatan Bersih</th>
-                                        <th>Profit</th>
-                                        <th>Margin</th>
-                                        <th>Rekomendasi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="comparisonTableBody">
-                                    <!-- Will be populated by JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title"><i class="fas fa-chart-pie" aria-hidden="true"></i> Distribusi Biaya Marketplace</h2>
-                        </div>
-                        
-                        <div class="chart-container">
-                            <canvas id="marketplaceCostChart" aria-label="Grafik distribusi biaya marketplace"></canvas>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title"><i class="fas fa-lightbulb" aria-hidden="true"></i> Rekomendasi Bisnis</h2>
-                        </div>
-                        
-                        <div id="recommendationsContainer">
-                            <!-- Recommendations will be added here -->
-                        </div>
-                    </div>
-                    
-                    <div class="btn-group">
-                        <button id="saveBtn" class="btn btn-secondary" aria-label="Simpan hasil perhitungan">
-                            <i class="fas fa-save" aria-hidden="true"></i> Simpan
-                        </button>
-                        <button id="exportBtn" class="btn btn-success" aria-label="Ekspor data ke CSV">
-                            <i class="fas fa-file-csv" aria-hidden="true"></i> Ekspor CSV
-                        </button>
-                        <button id="printBtn" class="btn btn-outline" aria-label="Cetak hasil perhitungan">
-                            <i class="fas fa-print" aria-hidden="true"></i> Cetak
-                        </button>
-                        <button id="newCalcBtn" class="btn btn-outline" aria-label="Mulai perhitungan baru">
-                            <i class="fas fa-redo" aria-hidden="true"></i> Baru
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
+            </main>
+        </div>
         
-        <!-- Menu Page (Initially Hidden) -->
+        <!-- Menu Page -->
         <div id="menuPage" class="hidden">
             <div class="card">
                 <div class="card-header">
@@ -969,7 +1146,7 @@
             </div>
         </div>
         
-        <!-- Report Page (Initially Hidden) -->
+        <!-- Report Page -->
         <div id="reportPage" class="hidden">
             <div class="card">
                 <div class="card-header">
@@ -1096,6 +1273,10 @@
         };
 
         // DOM Elements
+        const homePage = document.getElementById('homePage');
+        const calcPage = document.getElementById('calcPage');
+        const menuPage = document.getElementById('menuPage');
+        const reportPage = document.getElementById('reportPage');
         const ingredientsContainer = document.getElementById('ingredientsContainer');
         const addIngredientBtn = document.getElementById('addIngredient');
         const calculateBtn = document.getElementById('calculateBtn');
@@ -1116,11 +1297,11 @@
         const bestChannel = document.getElementById('bestChannel');
         const bestProfit = document.getElementById('bestProfit');
         const savedMenuList = document.getElementById('savedMenuList');
-        const menuPage = document.getElementById('menuPage');
-        const reportPage = document.getElementById('reportPage');
         const avgProfit = document.getElementById('avgProfit');
         const avgMargin = document.getElementById('avgMargin');
         const bestMarketplace = document.getElementById('bestMarketplace');
+        const startBtn = document.getElementById('startBtn');
+        const startBtn2 = document.getElementById('startBtn2');
         
         // Tab Elements
         const tabBtns = document.querySelectorAll('.tab-btn');
@@ -1143,6 +1324,10 @@
 
         // Set up event listeners
         function setupEventListeners() {
+            // Start buttons
+            startBtn.addEventListener('click', () => showPage('calc'));
+            startBtn2.addEventListener('click', () => showPage('calc'));
+            
             addIngredientBtn.addEventListener('click', addIngredientRow);
             calculateBtn.addEventListener('click', calculateBasicHPP);
             analyzeBtn.addEventListener('click', analyzeMarketplaces);
@@ -1192,7 +1377,8 @@
         // Show page based on navigation
         function showPage(pageId) {
             // Hide all pages
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            homePage.classList.add('hidden');
+            calcPage.classList.add('hidden');
             menuPage.classList.add('hidden');
             reportPage.classList.add('hidden');
             
@@ -1206,14 +1392,13 @@
             
             // Show selected page
             if (pageId === 'home') {
-                document.getElementById('basicTab').classList.remove('hidden');
-                document.querySelector('[data-tab="basic"]').click();
+                homePage.classList.remove('hidden');
             } else if (pageId === 'menu') {
                 menuPage.classList.remove('hidden');
                 loadSavedMenu();
             } else if (pageId === 'calc') {
+                calcPage.classList.remove('hidden');
                 document.querySelector('[data-tab="basic"]').click();
-                document.getElementById('basicTab').classList.remove('hidden');
             } else if (pageId === 'report') {
                 reportPage.classList.remove('hidden');
                 generateReport();
