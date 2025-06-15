@@ -544,6 +544,69 @@
             display: block;
         }
 
+        /* Menu List */
+        .menu-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-item-info {
+            flex: 1;
+        }
+
+        .menu-item-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .menu-item-details {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .menu-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Report Section */
+        .report-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .report-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .report-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 10px 0;
+            color: var(--primary);
+        }
+
+        .report-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
         /* Responsive Adjustments */
         @media (min-width: 768px) {
             .container {
@@ -893,6 +956,56 @@
                 </div>
             </div>
         </main>
+        
+        <!-- Menu Page (Initially Hidden) -->
+        <div id="menuPage" class="hidden">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-utensils" aria-hidden="true"></i> Daftar Menu Tersimpan</h2>
+                </div>
+                <div id="savedMenuList" class="menu-list">
+                    <!-- Saved menu items will be loaded here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Report Page (Initially Hidden) -->
+        <div id="reportPage" class="hidden">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-chart-line" aria-hidden="true"></i> Laporan Analisis</h2>
+                </div>
+                
+                <div class="report-summary">
+                    <div class="report-card">
+                        <i class="fas fa-coins" style="font-size: 2rem; color: var(--primary);"></i>
+                        <div class="report-value" id="avgProfit">Rp 0</div>
+                        <div class="report-label">Profit Rata-Rata</div>
+                    </div>
+                    
+                    <div class="report-card">
+                        <i class="fas fa-percentage" style="font-size: 2rem; color: var(--primary);"></i>
+                        <div class="report-value" id="avgMargin">0%</div>
+                        <div class="report-label">Margin Rata-Rata</div>
+                    </div>
+                    
+                    <div class="report-card">
+                        <i class="fas fa-store" style="font-size: 2rem; color: var(--primary);"></i>
+                        <div class="report-value" id="bestMarketplace">-</div>
+                        <div class="report-label">Marketplace Terbaik</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-chart-bar" aria-hidden="true"></i> Grafik Profit per Marketplace</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="reportChart" aria-label="Grafik laporan profit"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- Bottom Navigation -->
@@ -919,6 +1032,7 @@
         // Initialize variables
         let basicCostChart = null;
         let marketplaceCostChart = null;
+        let reportChart = null;
         let currentProduct = {
             name: "",
             portions: 1,
@@ -1001,6 +1115,12 @@
         const recommendationsContainer = document.getElementById('recommendationsContainer');
         const bestChannel = document.getElementById('bestChannel');
         const bestProfit = document.getElementById('bestProfit');
+        const savedMenuList = document.getElementById('savedMenuList');
+        const menuPage = document.getElementById('menuPage');
+        const reportPage = document.getElementById('reportPage');
+        const avgProfit = document.getElementById('avgProfit');
+        const avgMargin = document.getElementById('avgMargin');
+        const bestMarketplace = document.getElementById('bestMarketplace');
         
         // Tab Elements
         const tabBtns = document.querySelectorAll('.tab-btn');
@@ -1008,7 +1128,7 @@
         
         // Initialize the application
         document.addEventListener('DOMContentLoaded', () => {
-            // PERBAIKAN: Pastikan loading overlay disembunyikan saat halaman dimuat
+            // Pastikan loading disembunyikan saat halaman dimuat
             loadingOverlay.classList.add('hidden');
             
             // Tambahkan bahan pertama
@@ -1067,6 +1187,37 @@
             document.getElementById('nav-menu').addEventListener('click', () => showPage('menu'));
             document.getElementById('nav-calc').addEventListener('click', () => showPage('calc'));
             document.getElementById('nav-report').addEventListener('click', () => showPage('report'));
+        }
+
+        // Show page based on navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            menuPage.classList.add('hidden');
+            reportPage.classList.add('hidden');
+            
+            // Reset active nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Activate current nav item
+            document.getElementById(`nav-${pageId}`).classList.add('active');
+            
+            // Show selected page
+            if (pageId === 'home') {
+                document.getElementById('basicTab').classList.remove('hidden');
+                document.querySelector('[data-tab="basic"]').click();
+            } else if (pageId === 'menu') {
+                menuPage.classList.remove('hidden');
+                loadSavedMenu();
+            } else if (pageId === 'calc') {
+                document.querySelector('[data-tab="basic"]').click();
+                document.getElementById('basicTab').classList.remove('hidden');
+            } else if (pageId === 'report') {
+                reportPage.classList.remove('hidden');
+                generateReport();
+            }
         }
 
         // Add new ingredient row
@@ -1750,6 +1901,234 @@
             console.log('Saved calculations:', saved);
             // In a real app, you would display these in a list
         }
+        
+        // Load saved menu items
+        function loadSavedMenu() {
+            const savedCalculations = JSON.parse(localStorage.getItem('cafeproCalculations') || '[]');
+            savedMenuList.innerHTML = '';
+            
+            if (savedCalculations.length === 0) {
+                savedMenuList.innerHTML = '<p class="text-center">Belum ada perhitungan yang disimpan</p>';
+                return;
+            }
+            
+            savedCalculations.forEach((calc, index) => {
+                const item = document.createElement('div');
+                item.className = 'menu-item';
+                
+                // Find best profit
+                let bestProfit = -Infinity;
+                let bestChannel = '';
+                Object.entries(calc.marketplaceResults).forEach(([marketplace, result]) => {
+                    if (result.finalProfit > bestProfit) {
+                        bestProfit = result.finalProfit;
+                        bestChannel = marketplaceConfig[marketplace].name;
+                    }
+                });
+                
+                item.innerHTML = `
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">${calc.product.name}</div>
+                        <div class="menu-item-details">
+                            Harga Jual: ${formatCurrency(calc.product.sellingPrice)} | 
+                            Profit Terbaik: ${formatCurrency(bestProfit)} (${bestChannel})
+                        </div>
+                    </div>
+                    <div class="menu-item-actions">
+                        <button class="btn btn-outline" data-index="${index}" aria-label="Lihat detail">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-outline" data-index="${index}" aria-label="Hapus">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                savedMenuList.appendChild(item);
+                
+                // Add event listeners
+                item.querySelector('[aria-label="Lihat detail"]').addEventListener('click', function() {
+                    loadCalculation(index);
+                    showPage('calc');
+                });
+                
+                item.querySelector('[aria-label="Hapus"]').addEventListener('click', function() {
+                    deleteCalculation(index);
+                });
+            });
+        }
+        
+        // Delete saved calculation
+        function deleteCalculation(index) {
+            if (!confirm('Apakah Anda yakin ingin menghapus perhitungan ini?')) return;
+            
+            const savedCalculations = JSON.parse(localStorage.getItem('cafeproCalculations') || '[]');
+            savedCalculations.splice(index, 1);
+            localStorage.setItem('cafeproCalculations', JSON.stringify(savedCalculations));
+            loadSavedMenu();
+        }
+        
+        // Load calculation from storage
+        function loadCalculation(index) {
+            const savedCalculations = JSON.parse(localStorage.getItem('cafeproCalculations') || '[]');
+            if (index >= savedCalculations.length) return;
+            
+            const calc = savedCalculations[index];
+            currentProduct = calc.product;
+            marketplaceResults = calc.marketplaceResults;
+            
+            // Update form with loaded data
+            document.getElementById('productName').value = currentProduct.name;
+            document.getElementById('portionCount').value = currentProduct.portions;
+            document.getElementById('laborCost').value = currentProduct.laborCost;
+            document.getElementById('utilityCost').value = currentProduct.utilityCost;
+            document.getElementById('packagingCost').value = currentProduct.packagingCost;
+            document.getElementById('wastePercent').value = currentProduct.wastePercent;
+            document.getElementById('otherCost').value = currentProduct.otherCost;
+            document.getElementById('sellingPrice').value = currentProduct.sellingPrice;
+            
+            // Clear and re-add ingredients
+            ingredientsContainer.innerHTML = '';
+            currentProduct.ingredients.forEach(() => addIngredientRow());
+            
+            // Update ingredient inputs
+            const ingredientRows = ingredientsContainer.querySelectorAll('.ingredient-row');
+            currentProduct.ingredients.forEach((ing, i) => {
+                if (i < ingredientRows.length) {
+                    ingredientRows[i].querySelector('input[type="text"]').value = ing.name;
+                    ingredientRows[i].querySelector('input[type="number"]:nth-child(2)').value = ing.qty;
+                    ingredientRows[i].querySelector('select').value = ing.unit;
+                    ingredientRows[i].querySelector('input[type="number"]:nth-child(4)').value = ing.price;
+                }
+            });
+            
+            // Show results
+            displayBasicResults(
+                currentProduct.basicHPP,
+                currentProduct.sellingPrice - currentProduct.basicHPP,
+                ((currentProduct.sellingPrice - currentProduct.basicHPP) / currentProduct.sellingPrice) * 100
+            );
+            
+            createBasicCostChart(
+                currentProduct.basicHPP * 0.6, // Approximation
+                currentProduct.laborCost,
+                currentProduct.utilityCost,
+                currentProduct.packagingCost,
+                currentProduct.otherCost
+            );
+            
+            // Show marketplace results
+            if (Object.keys(marketplaceResults).length > 0) {
+                displayMarketplaceResults();
+            }
+        }
+        
+        // Generate report
+        function generateReport() {
+            const savedCalculations = JSON.parse(localStorage.getItem('cafeproCalculations') || '[]');
+            
+            if (savedCalculations.length === 0) {
+                avgProfit.textContent = "Rp 0";
+                avgMargin.textContent = "0%";
+                bestMarketplace.textContent = "-";
+                return;
+            }
+            
+            // Calculate averages
+            let totalProfit = 0;
+            let totalMargin = 0;
+            let marketplaceProfits = {};
+            
+            savedCalculations.forEach(calc => {
+                Object.entries(calc.marketplaceResults).forEach(([marketplace, result]) => {
+                    totalProfit += result.finalProfit;
+                    totalMargin += result.profitMargin;
+                    
+                    if (!marketplaceProfits[marketplace]) {
+                        marketplaceProfits[marketplace] = 0;
+                    }
+                    marketplaceProfits[marketplace] += result.finalProfit;
+                });
+            });
+            
+            const avgProfitValue = totalProfit / (savedCalculations.length * Object.keys(marketplaceProfits).length);
+            const avgMarginValue = totalMargin / (savedCalculations.length * Object.keys(marketplaceProfits).length);
+            
+            avgProfit.textContent = formatCurrency(avgProfitValue);
+            avgMargin.textContent = avgMarginValue.toFixed(1) + "%";
+            
+            // Find best marketplace
+            let bestProfit = -Infinity;
+            let bestMarketplaceName = '';
+            Object.entries(marketplaceProfits).forEach(([marketplace, profit]) => {
+                if (profit > bestProfit) {
+                    bestProfit = profit;
+                    bestMarketplaceName = marketplaceConfig[marketplace].name;
+                }
+            });
+            
+            bestMarketplace.textContent = bestMarketplaceName;
+            
+            // Create report chart
+            createReportChart(marketplaceProfits);
+        }
+        
+        // Create report chart
+        function createReportChart(marketplaceProfits) {
+            if (reportChart) {
+                reportChart.destroy();
+            }
+            
+            const ctx = document.getElementById('reportChart').getContext('2d');
+            const labels = [];
+            const data = [];
+            const colors = ['#E63946', '#2A9D8F', '#F4A261', '#E9C46A', '#1D3557'];
+            
+            Object.entries(marketplaceProfits).forEach(([marketplace, profit], index) => {
+                labels.push(marketplaceConfig[marketplace].name);
+                data.push(profit);
+            });
+            
+            reportChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total Profit',
+                        data: data,
+                        backgroundColor: colors,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Total Profit per Marketplace',
+                            font: {
+                                size: 16,
+                                family: "'Poppins', sans-serif"
+                            }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
 
         // Print results
         function printResults() {
@@ -1817,12 +2196,6 @@
             
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Show page
-        function showPage(pageId) {
-            // In a real app, this would show different pages
-            alert(`Navigasi ke halaman ${pageId} akan diimplementasikan!`);
         }
     </script>
 </body>
