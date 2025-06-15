@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#E63946">
+    <title>CafePro Advanced - Kalkulator HPP F&B + Marketplace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #E63946;
+            --secondary: #2A9D8F;
+            --accent: #F4A261;
+            --background: #F1FAEE;
+            --card: #FFFFFF;
+            --text: #1D3557;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            padding-bottom: 80px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 0 16px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 20px 16px;
+            text-align: center;
+            border-radius: 0 0 var(--radius) var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .logo i {
+            font-size: 32px;
+        }
+
+        .logo h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .card-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--text);
+        }
+
+        .card-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: #f8f9fa;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .input-group .form-control {
+            flex: 1;
+        }
+
+        .ingredient-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .ingredient-row .form-control {
+            flex: 1;
+        }
+
+        .unit-select {
+            min-width: 80px;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px;
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+
+        .remove-btn:hover {
+            opacity: 1;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #d32f3f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #23887c;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(230, 57, 70, 0.08);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        /* Results Styles */
+        .result-card {
+            background: linear-gradient(135deg, #1D3557, #2a5285);
+            color: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .result-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .result-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .result-subvalue {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 24px;
+        }
+
+        .progress-container {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            height: 24px;
+            margin: 24px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 100px;
+            text-align: center;
+            line-height: 24px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: width 1s ease-in-out;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 24px 0;
+        }
+
+        /* Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+            z-index: 100;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 14px 0;
+            font-size: 0.8rem;
+            color: #666;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            display: block;
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
+
+        /* Utility Classes */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-20 {
+            margin-top: 20px;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 6px;
+            display: block;
+        }
+        
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--primary);
+            border-top: 5px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Marketplace Section */
+        .marketplace-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .marketplace-card {
+            flex: 1;
+            min-width: 120px;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--radius);
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .marketplace-card.selected {
+            border-color: var(--primary);
+            background-color: rgba(230, 57, 70, 0.1);
+        }
+
+        .marketplace-card i {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comparison-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        .profit-positive {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .profit-negative {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .profit-warning {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .recommendation-card {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: var(--radius);
+            border-left: 4px solid;
+            background-color: #f8f9fa;
+        }
+
+        .recommendation-card.success {
+            border-color: var(--success);
+            background-color: #d4edda;
+        }
+
+        .recommendation-card.warning {
+            border-color: var(--warning);
+            background-color: #fff3cd;
+        }
+
+        .recommendation-card.danger {
+            border-color: var(--danger);
+            background-color: #f8d7da;
+        }
+
+        .recommendation-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .recommendation-card i {
+            font-size: 1.2rem;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 24px 0 16px;
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Responsive Adjustments */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            
+            .btn {
+                width: auto;
+            }
+            
+            .btn-group .btn {
+                flex: none;
+            }
+            
+            .input-group {
+                gap: 16px;
+            }
+
+            .marketplace-card {
+                min-width: 140px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .ingredient-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .comparison-table {
+                font-size: 0.8rem;
+            }
+            
+            .comparison-table th, 
+            .comparison-table td {
+                padding: 8px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-store" aria-hidden="true"></i>
+                <h1>CafePro HPP Advanced</h1>
+            </div>
+            <p class="subtitle">Kalkulator HPP & Analisis Marketplace untuk Bisnis F&B</p>
+        </header>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay hidden">
+            <div class="loading-spinner" aria-label="Memproses perhitungan"></div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="basic">Perhitungan Dasar</button>
+            <button class="tab-btn" data-tab="marketplace">Marketplace</button>
+            <button class="tab-btn" data-tab="results">Hasil & Analisis</button>
+        </div>
+
+        <!-- Main Form Section -->
+        <main>
+            <!-- Basic Calculation Tab -->
+            <div id="basicTab" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-calculator" aria-hidden="true"></i> Hitung HPP Produk</h2>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="productName">Nama Produk/Menu</label>
+                        <input type="text" id="productName" class="form-control" placeholder="Contoh: Cappuccino, Nasi Goreng Special" aria-required="true">
+                        <span id="nameError" class="error-message hidden">Harap masukkan nama produk</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="portionCount">Jumlah Porsi</label>
+                        <input type="number" id="portionCount" class="form-control" value="1" min="1" aria-required="true">
+                        <span id="portionError" class="error-message hidden">Jumlah porsi harus minimal 1</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-carrot" aria-hidden="true"></i> Bahan Baku</h2>
+                        </div>
+                        <div id="ingredientsContainer">
+                            <!-- Ingredients will be added dynamically here -->
+                        </div>
+                        <button id="addIngredient" class="btn btn-outline mt-20" aria-label="Tambah bahan baru">
+                            <i class="fas fa-plus" aria-hidden="true"></i> Tambah Bahan
+                        </button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-tools" aria-hidden="true"></i> Biaya Produksi</h2>
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label" for="laborCost">Tenaga Kerja (per porsi)</label>
+                                <input type="number" id="laborCost" class="form-control" value="2000" min="0" aria-label="Biaya tenaga kerja per porsi">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label" for="utilityCost">Listrik/Gas (per porsi)</label>
+                                <input type="number" id="utilityCost" class="form-control" value="500" min="0" aria-label="Biaya listrik/gas per porsi">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="packagingCost">Packaging (per porsi)</label>
+                            <input type="number" id="packagingCost" class="form-control" value="1000" min="0" aria-label="Biaya packaging per porsi">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-percentage" aria-hidden="true"></i> Biaya Lain</h2>
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label" for="wastePercent">Waste (% dari bahan baku)</label>
+                                <input type="number" id="wastePercent" class="form-control" value="5" min="0" max="100" aria-label="Persentase waste bahan baku">
+                                <span id="wasteError" class="error-message hidden">Waste harus antara 0-100%</span>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label" for="otherCost">Biaya Lainnya (per porsi)</label>
+                                <input type="number" id="otherCost" class="form-control" value="0" min="0" aria-label="Biaya lainnya per porsi">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="sellingPrice">Harga Jual (per porsi)</label>
+                            <input type="number" id="sellingPrice" class="form-control" value="25000" min="0" aria-label="Harga jual per porsi">
+                            <span id="priceError" class="error-message hidden">Harga jual harus lebih besar dari 0</span>
+                        </div>
+                    </div>
+                    
+                    <button id="calculateBtn" class="btn btn-primary" aria-label="Hitung HPP produk">
+                        <i class="fas fa-calculator" aria-hidden="true"></i> Hitung & Lanjut ke Marketplace
+                    </button>
+                </div>
+            </div>
+
+            <!-- Marketplace Tab -->
+            <div id="marketplaceTab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-store" aria-hidden="true"></i> Pilih Marketplace</h2>
+                    </div>
+                    
+                    <div class="marketplace-selector">
+                        <div class="marketplace-card" data-marketplace="shopee">
+                            <i class="fab fa-shopify"></i>
+                            <div>Shopee</div>
+                        </div>
+                        <div class="marketplace-card" data-marketplace="tokopedia">
+                            <i class="fas fa-shopping-cart"></i>
+                            <div>Tokopedia</div>
+                        </div>
+                        <div class="marketplace-card" data-marketplace="gofood">
+                            <i class="fas fa-motorcycle"></i>
+                            <div>GoFood</div>
+                        </div>
+                        <div class="marketplace-card" data-marketplace="grabfood">
+                            <i class="fas fa-car"></i>
+                            <div>GrabFood</div>
+                        </div>
+                        <div class="marketplace-card" data-marketplace="offline">
+                            <i class="fas fa-store-alt"></i>
+                            <div>Offline/Dine-in</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="section-title">
+                        <i class="fas fa-bullhorn"></i> Biaya Pemasaran & Promosi
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="adsBudget">Anggaran Iklan per Order (Rp)</label>
+                        <input type="number" id="adsBudget" class="form-control" value="0" min="0" aria-label="Anggaran iklan per order">
+                        <small class="text-muted">Shopee Ads, Boost, Featured Product</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="discountPercent">Diskon/Voucher Allocation (%)</label>
+                        <input type="number" id="discountPercent" class="form-control" value="0" min="0" max="100" aria-label="Persentase diskon">
+                        <small class="text-muted">Flash sale, voucher toko, promo khusus</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="cashbackPercent">Cashback Budget (%)</label>
+                        <input type="number" id="cashbackPercent" class="form-control" value="0" min="0" max="10" aria-label="Persentase cashback">
+                        <small class="text-muted">Program loyalitas, cashback member</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="deliverySubsidy">Free Delivery Subsidy (Rp)</label>
+                        <input type="number" id="deliverySubsidy" class="form-control" value="0" min="0" aria-label="Subsidi pengiriman gratis">
+                        <small class="text-muted">Jika gratis ongkir ditanggung seller</small>
+                    </div>
+                    
+                    <h3 class="section-title">
+                        <i class="fas fa-cogs"></i> Biaya Operasional Online
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="photoCost">Photography Cost per Product (Rp)</label>
+                        <input type="number" id="photoCost" class="form-control" value="0" min="0" aria-label="Biaya foto produk">
+                        <small class="text-muted">Alokasi biaya foto produk profesional</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="adminCost">Admin Marketplace per Order (Rp)</label>
+                        <input type="number" id="adminCost" class="form-control" value="0" min="0" aria-label="Biaya admin per order">
+                        <small class="text-muted">Gaji staff handle online order</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="returnReserve">Return/Refund Reserve (%)</label>
+                        <input type="number" id="returnReserve" class="form-control" value="0" min="0" max="10" aria-label="Persentase cadangan retur">
+                        <small class="text-muted">Antisipasi komplain, retur, refund</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="qcExtra">Quality Control Extra (Rp)</label>
+                        <input type="number" id="qcExtra" class="form-control" value="0" min="0" aria-label="Biaya quality control tambahan">
+                        <small class="text-muted">Standar kualitas marketplace</small>
+                    </div>
+                    
+                    <button id="analyzeBtn" class="btn btn-primary" aria-label="Analisis profitabilitas">
+                        <i class="fas fa-chart-line" aria-hidden="true"></i> Analisis Profitabilitas Marketplace
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Tab -->
+            <div id="resultsTab" class="tab-content">
+                <!-- Basic Results -->
+                <div id="basicResults" class="hidden">
+                    <div class="result-card">
+                        <h2 class="result-title"><i class="fas fa-receipt" aria-hidden="true"></i> HASIL PERHITUNGAN DASAR</h2>
+                        <div class="result-value" id="hppResult">Rp 0</div>
+                        <div class="result-subvalue" id="profitResult">Profit: Rp 0 (0%)</div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-bar" id="profitBar" style="width: 0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                        </div>
+                        
+                        <p>Margin Profit: <span id="marginPercent">0</span>%</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-chart-pie" aria-hidden="true"></i> Distribusi Biaya Dasar</h2>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <canvas id="basicCostChart" aria-label="Grafik distribusi biaya dasar"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Marketplace Results -->
+                <div id="marketplaceResults" class="hidden">
+                    <div class="result-card">
+                        <h2 class="result-title"><i class="fas fa-store" aria-hidden="true"></i> ANALISIS MARKETPLACE</h2>
+                        <div class="result-value" id="bestChannel">-</div>
+                        <div class="result-subvalue" id="bestProfit">Profit: Rp 0 (0%)</div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-exchange-alt" aria-hidden="true"></i> Perbandingan Profitabilitas Channel</h2>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Channel</th>
+                                        <th>HPP Total</th>
+                                        <th>Pendapatan Bersih</th>
+                                        <th>Profit</th>
+                                        <th>Margin</th>
+                                        <th>Rekomendasi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comparisonTableBody">
+                                    <!-- Will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-chart-pie" aria-hidden="true"></i> Distribusi Biaya Marketplace</h2>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <canvas id="marketplaceCostChart" aria-label="Grafik distribusi biaya marketplace"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-lightbulb" aria-hidden="true"></i> Rekomendasi Bisnis</h2>
+                        </div>
+                        
+                        <div id="recommendationsContainer">
+                            <!-- Recommendations will be added here -->
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button id="saveBtn" class="btn btn-secondary" aria-label="Simpan hasil perhitungan">
+                            <i class="fas fa-save" aria-hidden="true"></i> Simpan
+                        </button>
+                        <button id="exportBtn" class="btn btn-success" aria-label="Ekspor data ke CSV">
+                            <i class="fas fa-file-csv" aria-hidden="true"></i> Ekspor CSV
+                        </button>
+                        <button id="printBtn" class="btn btn-outline" aria-label="Cetak hasil perhitungan">
+                            <i class="fas fa-print" aria-hidden="true"></i> Cetak
+                        </button>
+                        <button id="newCalcBtn" class="btn btn-outline" aria-label="Mulai perhitungan baru">
+                            <i class="fas fa-redo" aria-hidden="true"></i> Baru
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" aria-label="Menu utama">
+        <a href="#" class="nav-item active" id="nav-home" aria-label="Beranda">
+            <i class="fas fa-home" aria-hidden="true"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item" id="nav-menu" aria-label="Daftar menu">
+            <i class="fas fa-utensils" aria-hidden="true"></i>
+            <span>Menu</span>
+        </a>
+        <a href="#" class="nav-item" id="nav-calc" aria-label="Kalkulator">
+            <i class="fas fa-calculator" aria-hidden="true"></i>
+            <span>Hitung</span>
+        </a>
+        <a href="#" class="nav-item" id="nav-report" aria-label="Laporan">
+            <i class="fas fa-chart-line" aria-hidden="true"></i>
+            <span>Laporan</span>
+        </a>
+    </nav>
+    
+    <script>
+        // Initialize variables
+        let basicCostChart = null;
+        let marketplaceCostChart = null;
+        let currentProduct = {
+            name: "",
+            portions: 1,
+            ingredients: [],
+            laborCost: 2000,
+            utilityCost: 500,
+            packagingCost: 1000,
+            wastePercent: 5,
+            otherCost: 0,
+            sellingPrice: 25000,
+            basicHPP: 0
+        };
+
+        let marketplaceResults = {};
+        let selectedMarketplaces = [];
+        
+        // Marketplace Configuration
+        const marketplaceConfig = {
+            shopee: {
+                name: "Shopee",
+                commissionRate: 0.05,
+                paymentFee: 0.029,
+                minDeliveryFee: 8000,
+                maxDeliveryFee: 15000,
+                packagingExtra: 3000,
+                insuranceRate: 0.005
+            },
+            tokopedia: {
+                name: "Tokopedia", 
+                commissionRate: 0.04,
+                paymentFee: 0.027,
+                minDeliveryFee: 9000,
+                maxDeliveryFee: 16000,
+                packagingExtra: 2500,
+                insuranceRate: 0.003
+            },
+            gofood: {
+                name: "GoFood",
+                commissionRate: 0.25,
+                paymentFee: 0.02,
+                deliveryFee: 0,
+                packagingExtra: 2000,
+                insuranceRate: 0.002
+            },
+            grabfood: {
+                name: "GrabFood",
+                commissionRate: 0.23,
+                paymentFee: 0.02,
+                deliveryFee: 0,
+                packagingExtra: 2000,
+                insuranceRate: 0.002
+            },
+            offline: {
+                name: "Offline/Dine-in",
+                commissionRate: 0,
+                paymentFee: 0,
+                deliveryFee: 0,
+                packagingExtra: 0,
+                insuranceRate: 0
+            }
+        };
+
+        // DOM Elements
+        const ingredientsContainer = document.getElementById('ingredientsContainer');
+        const addIngredientBtn = document.getElementById('addIngredient');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const basicResults = document.getElementById('basicResults');
+        const marketplaceResultsSection = document.getElementById('marketplaceResults');
+        const hppResult = document.getElementById('hppResult');
+        const profitResult = document.getElementById('profitResult');
+        const profitBar = document.getElementById('profitBar');
+        const marginPercent = document.getElementById('marginPercent');
+        const saveBtn = document.getElementById('saveBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const printBtn = document.getElementById('printBtn');
+        const newCalcBtn = document.getElementById('newCalcBtn');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const comparisonTableBody = document.getElementById('comparisonTableBody');
+        const recommendationsContainer = document.getElementById('recommendationsContainer');
+        const bestChannel = document.getElementById('bestChannel');
+        const bestProfit = document.getElementById('bestProfit');
+        
+        // Tab Elements
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // Initialize with one ingredient
+        document.addEventListener('DOMContentLoaded', () => {
+            addIngredientRow();
+            setupEventListeners();
+            loadSavedCalculations();
+        });
+
+        // Set up event listeners
+        function setupEventListeners() {
+            addIngredientBtn.addEventListener('click', addIngredientRow);
+            calculateBtn.addEventListener('click', calculateBasicHPP);
+            analyzeBtn.addEventListener('click', analyzeMarketplaces);
+            saveBtn.addEventListener('click', saveCalculation);
+            exportBtn.addEventListener('click', exportToCSV);
+            printBtn.addEventListener('click', printResults);
+            newCalcBtn.addEventListener('click', resetCalculator);
+            
+            // Marketplace selector
+            document.querySelectorAll('.marketplace-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const marketplace = this.dataset.marketplace;
+                    
+                    if (selectedMarketplaces.includes(marketplace)) {
+                        selectedMarketplaces = selectedMarketplaces.filter(m => m !== marketplace);
+                    } else {
+                        selectedMarketplaces.push(marketplace);
+                    }
+                });
+            });
+            
+            // Tab navigation
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(tab => tab.classList.remove('active'));
+                    
+                    // Show the target tab
+                    const tabId = this.dataset.tab;
+                    document.getElementById(`${tabId}Tab`).classList.add('active');
+                });
+            });
+            
+            // Navigation listeners
+            document.getElementById('nav-home').addEventListener('click', () => showPage('home'));
+            document.getElementById('nav-menu').addEventListener('click', () => showPage('menu'));
+            document.getElementById('nav-calc').addEventListener('click', () => showPage('calc'));
+            document.getElementById('nav-report').addEventListener('click', () => showPage('report'));
+        }
+
+        // Add new ingredient row
+        function addIngredientRow() {
+            const rowId = Date.now();
+            const row = document.createElement('div');
+            row.className = 'ingredient-row';
+            row.innerHTML = `
+                <input type="text" class="form-control" placeholder="Nama Bahan" id="ingredientName-${rowId}" aria-label="Nama bahan">
+                <input type="number" class="form-control" placeholder="Qty" id="ingredientQty-${rowId}" min="0" step="0.01" value="100" aria-label="Kuantitas bahan">
+                <select class="form-control unit-select" id="ingredientUnit-${rowId}" aria-label="Satuan bahan">
+                    <option value="gr">gr</option>
+                    <option value="kg">kg</option>
+                    <option value="ml">ml</option>
+                    <option value="L">L</option>
+                    <option value="pcs">pcs</option>
+                    <option value="sdt">sdt</option>
+                    <option value="sdm">sdm</option>
+                </select>
+                <input type="number" class="form-control" placeholder="Harga" id="ingredientPrice-${rowId}" min="0" value="1000" aria-label="Harga bahan">
+                <button class="remove-btn" data-id="${rowId}" aria-label="Hapus bahan">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            `;
+            ingredientsContainer.appendChild(row);
+            
+            // Add event listener for remove button
+            row.querySelector('.remove-btn').addEventListener('click', function() {
+                if (ingredientsContainer.children.length > 1) {
+                    ingredientsContainer.removeChild(row);
+                } else {
+                    alert('Setidaknya harus ada satu bahan baku');
+                }
+            });
+        }
+
+        // Validate form inputs
+        function validateForm() {
+            let isValid = true;
+            
+            // Reset errors
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.classList.add('hidden');
+            });
+            
+            // Validate product name
+            const productName = document.getElementById('productName').value.trim();
+            if (!productName) {
+                document.getElementById('nameError').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Validate portions
+            const portions = parseInt(document.getElementById('portionCount').value);
+            if (isNaN(portions) || portions < 1) {
+                document.getElementById('portionError').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Validate selling price
+            const sellingPrice = parseFloat(document.getElementById('sellingPrice').value);
+            if (isNaN(sellingPrice) || sellingPrice <= 0) {
+                document.getElementById('priceError').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Validate waste percentage
+            const wastePercent = parseFloat(document.getElementById('wastePercent').value);
+            if (isNaN(wastePercent) || wastePercent < 0 || wastePercent > 100) {
+                document.getElementById('wasteError').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Validate ingredients
+            let ingredientError = false;
+            const ingredientRows = ingredientsContainer.querySelectorAll('.ingredient-row');
+            ingredientRows.forEach(row => {
+                const name = row.querySelector('input[type="text"]').value.trim();
+                const qty = parseFloat(row.querySelector('input[type="number"]:nth-child(2)').value);
+                const price = parseFloat(row.querySelector('input[type="number"]:nth-child(4)').value);
+                
+                if (!name || isNaN(qty) || qty <= 0 || isNaN(price) || price < 0) {
+                    ingredientError = true;
+                    row.style.border = '2px solid var(--danger)';
+                    row.style.borderRadius = '12px';
+                    row.style.padding = '8px';
+                } else {
+                    row.style.border = '';
+                    row.style.padding = '';
+                }
+            });
+            
+            if (ingredientError) {
+                alert('Harap isi semua kolom bahan baku dengan benar');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+
+        // Calculate basic HPP
+        function calculateBasicHPP() {
+            if (!validateForm()) return;
+            
+            // Show loading
+            loadingOverlay.classList.remove('hidden');
+            
+            // Delay to simulate calculation
+            setTimeout(() => {
+                try {
+                    // Get product details
+                    currentProduct.name = document.getElementById('productName').value.trim();
+                    currentProduct.portions = parseInt(document.getElementById('portionCount').value);
+                    currentProduct.laborCost = parseFloat(document.getElementById('laborCost').value) || 0;
+                    currentProduct.utilityCost = parseFloat(document.getElementById('utilityCost').value) || 0;
+                    currentProduct.packagingCost = parseFloat(document.getElementById('packagingCost').value) || 0;
+                    currentProduct.wastePercent = parseFloat(document.getElementById('wastePercent').value) || 0;
+                    currentProduct.otherCost = parseFloat(document.getElementById('otherCost').value) || 0;
+                    currentProduct.sellingPrice = parseFloat(document.getElementById('sellingPrice').value);
+                    
+                    // Reset ingredients array
+                    currentProduct.ingredients = [];
+                    
+                    // Get ingredients
+                    const ingredientRows = ingredientsContainer.querySelectorAll('.ingredient-row');
+                    ingredientRows.forEach(row => {
+                        const name = row.querySelector('input[type="text"]').value.trim();
+                        const qty = parseFloat(row.querySelector('input[type="number"]:nth-child(2)').value);
+                        const unit = row.querySelector('select').value;
+                        const price = parseFloat(row.querySelector('input[type="number"]:nth-child(4)').value);
+                        
+                        currentProduct.ingredients.push({
+                            name,
+                            qty,
+                            unit,
+                            price
+                        });
+                    });
+                    
+                    // Calculate total ingredient cost
+                    let totalIngredientCost = 0;
+                    currentProduct.ingredients.forEach(ing => {
+                        totalIngredientCost += ing.price;
+                    });
+                    
+                    // Adjust for waste
+                    const wasteFactor = 1 + (currentProduct.wastePercent / 100);
+                    const adjustedIngredientCost = totalIngredientCost * wasteFactor;
+                    
+                    // Total production costs
+                    const totalProductionCost = (
+                        currentProduct.laborCost + 
+                        currentProduct.utilityCost + 
+                        currentProduct.packagingCost + 
+                        currentProduct.otherCost
+                    );
+                    
+                    // Total cost for all portions
+                    const totalCost = adjustedIngredientCost + totalProductionCost;
+                    
+                    // HPP per portion
+                    const hppPerPortion = totalCost / currentProduct.portions;
+                    currentProduct.basicHPP = hppPerPortion;
+                    
+                    // Calculate profit and margin
+                    const profitPerPortion = currentProduct.sellingPrice - hppPerPortion;
+                    const profitMargin = (profitPerPortion / currentProduct.sellingPrice) * 100;
+                    
+                    // Display results
+                    displayBasicResults(hppPerPortion, profitPerPortion, profitMargin);
+                    
+                    // Create cost breakdown chart
+                    createBasicCostChart(
+                        adjustedIngredientCost,
+                        currentProduct.laborCost,
+                        currentProduct.utilityCost,
+                        currentProduct.packagingCost,
+                        currentProduct.otherCost
+                    );
+                    
+                    // Switch to marketplace tab
+                    setTimeout(() => {
+                        document.querySelector('[data-tab="marketplace"]').click();
+                        loadingOverlay.classList.add('hidden');
+                    }, 500);
+                    
+                } catch (error) {
+                    console.error("Calculation error:", error);
+                    alert("Terjadi kesalahan: " + error.message);
+                    loadingOverlay.classList.add('hidden');
+                }
+            }, 800);
+        }
+
+        // Display basic results
+        function displayBasicResults(hpp, profit, margin) {
+            // Format currency
+            const formatter = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            });
+            
+            // Update result elements
+            hppResult.textContent = formatter.format(hpp);
+            profitResult.textContent = `Profit: ${formatter.format(profit)} (${margin.toFixed(1)}%)`;
+            marginPercent.textContent = margin.toFixed(1);
+            
+            // Update progress bar
+            const progressWidth = Math.min(Math.max(margin, 0), 100);
+            profitBar.style.width = `${progressWidth}%`;
+            profitBar.textContent = `${progressWidth.toFixed(1)}%`;
+            profitBar.setAttribute('aria-valuenow', progressWidth);
+            
+            // Show results section
+            basicResults.classList.remove('hidden');
+        }
+
+        // Create basic cost breakdown chart
+        function createBasicCostChart(ingredients, labor, utilities, packaging, other) {
+            // Destroy previous chart if exists
+            if (basicCostChart) {
+                basicCostChart.destroy();
+            }
+            
+            // Get canvas context
+            const ctx = document.getElementById('basicCostChart').getContext('2d');
+            
+            // Create chart
+            basicCostChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Bahan Baku', 'Tenaga Kerja', 'Listrik/Gas', 'Packaging', 'Biaya Lain'],
+                    datasets: [{
+                        data: [ingredients, labor, utilities, packaging, other],
+                        backgroundColor: [
+                            '#E63946',
+                            '#2A9D8F',
+                            '#F4A261',
+                            '#E9C46A',
+                            '#1D3557'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    family: "'Nunito', sans-serif",
+                                    size: 12
+                                },
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.chart.getDatasetMeta(0).total;
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${formatCurrency(value)} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        }
+
+        // Analyze marketplaces
+        function analyzeMarketplaces() {
+            if (selectedMarketplaces.length === 0) {
+                alert('Pilih setidaknya satu marketplace untuk dianalisis');
+                return;
+            }
+            
+            loadingOverlay.classList.remove('hidden');
+            
+            setTimeout(() => {
+                try {
+                    // Get marketing costs
+                    const marketingCosts = {
+                        adsBudget: parseFloat(document.getElementById('adsBudget').value) || 0,
+                        discountPercent: parseFloat(document.getElementById('discountPercent').value) || 0,
+                        cashbackPercent: parseFloat(document.getElementById('cashbackPercent').value) || 0,
+                        deliverySubsidy: parseFloat(document.getElementById('deliverySubsidy').value) || 0
+                    };
+                    
+                    // Get operational costs
+                    const operationalCosts = {
+                        photoCost: parseFloat(document.getElementById('photoCost').value) || 0,
+                        adminCost: parseFloat(document.getElementById('adminCost').value) || 0,
+                        returnReserve: parseFloat(document.getElementById('returnReserve').value) || 0,
+                        qcExtra: parseFloat(document.getElementById('qcExtra').value) || 0
+                    };
+                    
+                    // Reset results
+                    marketplaceResults = {};
+                    
+                    // Calculate for each selected marketplace
+                    selectedMarketplaces.forEach(marketplace => {
+                        const result = calculateMultiChannelHPP(
+                            currentProduct.basicHPP,
+                            currentProduct.sellingPrice,
+                            marketplace,
+                            marketingCosts,
+                            operationalCosts
+                        );
+                        
+                        marketplaceResults[marketplace] = result;
+                    });
+                    
+                    // Display results
+                    displayMarketplaceResults();
+                    
+                    // Switch to results tab
+                    setTimeout(() => {
+                        document.querySelector('[data-tab="results"]').click();
+                        marketplaceResultsSection.classList.remove('hidden');
+                        loadingOverlay.classList.add('hidden');
+                    }, 500);
+                    
+                } catch (error) {
+                    console.error("Analysis error:", error);
+                    alert("Terjadi kesalahan: " + error.message);
+                    loadingOverlay.classList.add('hidden');
+                }
+            }, 800);
+        }
+
+        // Calculate multi-channel HPP
+        function calculateMultiChannelHPP(basicHPP, sellingPrice, marketplaceType, marketingCosts, operationalCosts) {
+            const config = marketplaceConfig[marketplaceType];
+            
+            // Marketplace Fees
+            const commissionFee = sellingPrice * config.commissionRate;
+            const paymentFee = sellingPrice * config.paymentFee;
+            
+            // Calculate delivery fee
+            let deliveryFee = 0;
+            if (config.deliveryFee) {
+                deliveryFee = config.deliveryFee;
+            } else if (marketingCosts.deliverySubsidy > 0) {
+                deliveryFee = marketingCosts.deliverySubsidy;
+            } else {
+                deliveryFee = (config.minDeliveryFee + config.maxDeliveryFee) / 2;
+            }
+            
+            const packagingExtra = config.packagingExtra;
+            const insuranceFee = sellingPrice * config.insuranceRate;
+            
+            // Marketing Costs
+            const adsCost = marketingCosts.adsBudget || 0;
+            const discountAmount = sellingPrice * (marketingCosts.discountPercent / 100);
+            const cashbackAmount = sellingPrice * (marketingCosts.cashbackPercent / 100);
+            
+            // Operational Costs
+            const photoCost = operationalCosts.photoCost || 0;
+            const adminCost = operationalCosts.adminCost || 0;
+            const returnReserve = sellingPrice * (operationalCosts.returnReserve / 100);
+            const qcExtra = operationalCosts.qcExtra || 0;
+            
+            // Total Additional Costs
+            const totalAdditionalCosts = commissionFee + paymentFee + deliveryFee + 
+                packagingExtra + insuranceFee + adsCost + discountAmount + 
+                cashbackAmount + photoCost + adminCost + returnReserve + qcExtra;
+            
+            // Final HPP & Profit Calculation
+            const finalHPP = basicHPP + totalAdditionalCosts;
+            const netRevenue = sellingPrice - discountAmount - cashbackAmount;
+            const finalProfit = netRevenue - finalHPP;
+            const profitMargin = (finalProfit / netRevenue) * 100;
+            
+            return {
+                basicHPP,
+                finalHPP,
+                netRevenue,
+                finalProfit,
+                profitMargin,
+                breakdown: {
+                    commissionFee,
+                    paymentFee,
+                    deliveryFee,
+                    packagingExtra,
+                    insuranceFee,
+                    adsCost,
+                    discountAmount,
+                    cashbackAmount,
+                    photoCost,
+                    adminCost,
+                    returnReserve,
+                    qcExtra
+                }
+            };
+        }
+
+        // Display marketplace results
+        function displayMarketplaceResults() {
+            const formatter = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            });
+            
+            // Clear table
+            comparisonTableBody.innerHTML = '';
+            
+            // Find the best channel
+            let bestProfit = -Infinity;
+            let bestChannelName = '';
+            
+            // Add rows for each marketplace
+            Object.entries(marketplaceResults).forEach(([marketplace, result]) => {
+                const row = document.createElement('tr');
+                
+                // Determine profit class
+                let profitClass = '';
+                if (result.finalProfit > 0) {
+                    profitClass = 'profit-positive';
+                } else if (result.finalProfit < 0) {
+                    profitClass = 'profit-negative';
+                } else {
+                    profitClass = 'profit-warning';
+                }
+                
+                // Recommendation
+                let recommendation = '';
+                if (result.profitMargin >= 20) {
+                    recommendation = 'Sangat Menguntungkan';
+                } else if (result.profitMargin >= 10) {
+                    recommendation = 'Menguntungkan';
+                } else if (result.profitMargin > 0) {
+                    recommendation = 'Margin Tipis';
+                } else {
+                    recommendation = 'Tidak Menguntungkan';
+                }
+                
+                row.innerHTML = `
+                    <td><strong>${marketplaceConfig[marketplace].name}</strong></td>
+                    <td>${formatter.format(result.finalHPP)}</td>
+                    <td>${formatter.format(result.netRevenue)}</td>
+                    <td class="${profitClass}">${formatter.format(result.finalProfit)}</td>
+                    <td class="${profitClass}">${result.profitMargin.toFixed(1)}%</td>
+                    <td>${recommendation}</td>
+                `;
+                
+                comparisonTableBody.appendChild(row);
+                
+                // Track best channel
+                if (result.finalProfit > bestProfit) {
+                    bestProfit = result.finalProfit;
+                    bestChannelName = marketplaceConfig[marketplace].name;
+                }
+            });
+            
+            // Display best channel
+            bestChannel.textContent = bestChannelName;
+            bestProfit.textContent = `Profit: ${formatter.format(bestProfit)}`;
+            
+            // Generate recommendations
+            generateRecommendations();
+            
+            // Create marketplace cost chart (for the first marketplace)
+            const firstMarketplace = selectedMarketplaces[0];
+            createMarketplaceCostChart(
+                marketplaceResults[firstMarketplace]
+            );
+        }
+
+        // Create marketplace cost chart
+        function createMarketplaceCostChart(marketplaceData) {
+            // Destroy previous chart if exists
+            if (marketplaceCostChart) {
+                marketplaceCostChart.destroy();
+            }
+            
+            // Get canvas context
+            const ctx = document.getElementById('marketplaceCostChart').getContext('2d');
+            
+            // Create chart
+            marketplaceCostChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Bahan Baku', 'Tenaga Kerja', 'Utilities', 'Packaging Dasar',
+                        'Komisi', 'Biaya Pembayaran', 'Pengiriman', 'Packaging Tambahan',
+                        'Pemasaran', 'Operasional', 'Lain-lain'
+                    ],
+                    datasets: [{
+                        data: [
+                            currentProduct.basicHPP * 0.6, // Estimated base ingredient cost
+                            currentProduct.laborCost,
+                            currentProduct.utilityCost,
+                            currentProduct.packagingCost,
+                            marketplaceData.breakdown.commissionFee,
+                            marketplaceData.breakdown.paymentFee,
+                            marketplaceData.breakdown.deliveryFee,
+                            marketplaceData.breakdown.packagingExtra,
+                            marketplaceData.breakdown.adsCost + marketplaceData.breakdown.discountAmount,
+                            marketplaceData.breakdown.adminCost + marketplaceData.breakdown.photoCost,
+                            currentProduct.otherCost + marketplaceData.breakdown.returnReserve + marketplaceData.breakdown.qcExtra
+                        ],
+                        backgroundColor: [
+                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                            '#FF9F40', '#9966FF', '#C9CBCF', '#FFCD56',
+                            '#4BC0C0', '#36A2EB', '#FF6384'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Distribusi Biaya Marketplace',
+                            font: {
+                                size: 16,
+                                family: "'Poppins', sans-serif"
+                            }
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    family: "'Nunito', sans-serif",
+                                    size: 12
+                                },
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.chart.getDatasetMeta(0).total;
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${formatCurrency(value)} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '50%'
+                }
+            });
+        }
+
+        // Generate recommendations
+        function generateRecommendations() {
+            recommendationsContainer.innerHTML = '';
+            
+            // Find most profitable channel
+            const mostProfitable = Object.entries(marketplaceResults)
+                .sort((a, b) => b[1].finalProfit - a[1].finalProfit)[0];
+            
+            const mostProfitableName = marketplaceConfig[mostProfitable[0]].name;
+            const mostProfitableProfit = mostProfitable[1].finalProfit;
+            
+            // Add recommendation card
+            const successCard = document.createElement('div');
+            successCard.className = 'recommendation-card success';
+            successCard.innerHTML = `
+                <h4><i class="fas fa-medal"></i> Channel Terbaik</h4>
+                <p>${mostProfitableName} memberikan profit tertinggi: ${formatCurrency(mostProfitableProfit)} per porsi dengan margin ${mostProfitable[1].profitMargin.toFixed(1)}%</p>
+            `;
+            recommendationsContainer.appendChild(successCard);
+            
+            // Check for negative margins
+            Object.entries(marketplaceResults).forEach(([marketplace, result]) => {
+                if (result.profitMargin < 0) {
+                    const dangerCard = document.createElement('div');
+                    dangerCard.className = 'recommendation-card danger';
+                    dangerCard.innerHTML = `
+                        <h4><i class="fas fa-exclamation-triangle"></i> Margin Negatif</h4>
+                        <p>${marketplaceConfig[marketplace].name}: Rugi ${formatCurrency(Math.abs(result.finalProfit))} per porsi. Pertimbangkan untuk menaikkan harga atau mengurangi biaya.</p>
+                    `;
+                    recommendationsContainer.appendChild(dangerCard);
+                } else if (result.profitMargin < 10) {
+                    const warningCard = document.createElement('div');
+                    warningCard.className = 'recommendation-card warning';
+                    warningCard.innerHTML = `
+                        <h4><i class="fas fa-info-circle"></i> Margin Tipis</h4>
+                        <p>${marketplaceConfig[marketplace].name}: Margin hanya ${result.profitMargin.toFixed(1)}%. Target minimal 15-20%. Pertimbangkan optimasi biaya atau penyesuaian harga.</p>
+                    `;
+                    recommendationsContainer.appendChild(warningCard);
+                }
+            });
+            
+            // General recommendation
+            const infoCard = document.createElement('div');
+            infoCard.className = 'recommendation-card';
+            infoCard.innerHTML = `
+                <h4><i class="fas fa-lightbulb"></i> Strategi Umum</h4>
+                <p>Pertimbangkan untuk mengalokasikan lebih banyak sumber daya ke ${mostProfitableName} dan memantau biaya marketplace secara berkala untuk memaksimalkan profitabilitas.</p>
+            `;
+            recommendationsContainer.appendChild(infoCard);
+        }
+
+        // Format currency
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(value);
+        }
+
+        // Export to CSV
+        function exportToCSV() {
+            if (Object.keys(marketplaceResults).length === 0) {
+                alert('Tidak ada data untuk diekspor. Silakan lakukan analisis terlebih dahulu.');
+                return;
+            }
+            
+            const headers = ['Channel', 'HPP Dasar', 'HPP Total', 'Pendapatan Bersih', 'Profit', 'Margin (%)'];
+            const rows = Object.entries(marketplaceResults).map(([marketplace, result]) => [
+                marketplaceConfig[marketplace].name,
+                result.basicHPP,
+                result.finalHPP,
+                result.netRevenue,
+                result.finalProfit,
+                result.profitMargin.toFixed(2)
+            ]);
+            
+            const csvContent = [headers, ...rows]
+                .map(row => row.join(','))
+                .join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `hpp-analysis-${currentProduct.name.replace(/\s+/g, '-')}-${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Save calculation
+        function saveCalculation() {
+            if (!currentProduct.name) {
+                alert('Harap isi nama produk terlebih dahulu!');
+                return;
+            }
+            
+            if (Object.keys(marketplaceResults).length === 0) {
+                alert('Tidak ada hasil analisis untuk disimpan. Silakan lakukan analisis terlebih dahulu.');
+                return;
+            }
+            
+            // Get saved calculations or initialize
+            let savedCalculations = JSON.parse(localStorage.getItem('cafeproCalculations') || '[]');
+            
+            // Add current calculation
+            savedCalculations.push({
+                product: currentProduct,
+                marketplaceResults: marketplaceResults,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Save to localStorage
+            localStorage.setItem('cafeproCalculations', JSON.stringify(savedCalculations));
+            
+            alert(`Perhitungan untuk "${currentProduct.name}" telah disimpan!`);
+        }
+
+        // Load saved calculations
+        function loadSavedCalculations() {
+            const saved = JSON.parse(localStorage.getItem('cafeproCalculations') || '[]');
+            console.log('Saved calculations:', saved);
+            // In a real app, you would display these in a list
+        }
+
+        // Print results
+        function printResults() {
+            window.print();
+        }
+
+        // Reset calculator
+        function resetCalculator() {
+            // Reset form
+            document.getElementById('productName').value = '';
+            document.getElementById('portionCount').value = '1';
+            document.getElementById('laborCost').value = '2000';
+            document.getElementById('utilityCost').value = '500';
+            document.getElementById('packagingCost').value = '1000';
+            document.getElementById('wastePercent').value = '5';
+            document.getElementById('otherCost').value = '0';
+            document.getElementById('sellingPrice').value = '25000';
+            
+            // Reset marketing inputs
+            document.getElementById('adsBudget').value = '0';
+            document.getElementById('discountPercent').value = '0';
+            document.getElementById('cashbackPercent').value = '0';
+            document.getElementById('deliverySubsidy').value = '0';
+            
+            // Reset operational inputs
+            document.getElementById('photoCost').value = '0';
+            document.getElementById('adminCost').value = '0';
+            document.getElementById('returnReserve').value = '0';
+            document.getElementById('qcExtra').value = '0';
+            
+            // Reset ingredients
+            ingredientsContainer.innerHTML = '';
+            addIngredientRow();
+            
+            // Reset marketplace selection
+            document.querySelectorAll('.marketplace-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            selectedMarketplaces = [];
+            
+            // Hide results
+            basicResults.classList.add('hidden');
+            marketplaceResultsSection.classList.add('hidden');
+            
+            // Destroy charts
+            if (basicCostChart) {
+                basicCostChart.destroy();
+                basicCostChart = null;
+            }
+            if (marketplaceCostChart) {
+                marketplaceCostChart.destroy();
+                marketplaceCostChart = null;
+            }
+            
+            // Reset errors
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.classList.add('hidden');
+            });
+            
+            // Clear recommendations
+            recommendationsContainer.innerHTML = '';
+            
+            // Switch to first tab
+            document.querySelector('[data-tab="basic"]').click();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Show page
+        function showPage(pageId) {
+            // In a real app, this would show different pages
+            alert(`Navigasi ke halaman ${pageId} akan diimplementasikan!`);
+        }
+    </script>
+</body>
+</html>
